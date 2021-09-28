@@ -77,3 +77,8 @@ blog_post_pattern = "posts/*/*"
 post_redirect_refresh = 1
 post_auto_image = 1
 post_auto_excerpt = 2
+
+panels_add_bootstrap_css = False
+
+def setup(app):
+    app.add_css_file("custom.css")

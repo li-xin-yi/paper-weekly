@@ -1,10 +1,11 @@
 ## Recent posts
 
-See the [blog archives](blog.md) for a more complete list.
+See the [note archives](notes.md) for a more complete list.
 
 ```{postlist}
 :date: "%Y-%m-%d"
-:format: "{date} - {title}"
+:list-style: circle
+:format: "{title} - {date}"
 :excerpts:
 ```
 
