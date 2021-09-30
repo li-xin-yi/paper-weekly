@@ -1,3 +1,8 @@
+# Hi, there 👋
+
+This is a website that posts notes for papers I read every week.
+
+
 ## Recent posts
 
 See the [note archives](notes.md) for a more complete list.
