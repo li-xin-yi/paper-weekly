@@ -51,6 +51,7 @@ html_theme = "pydata_sphinx_theme"
 html_theme_options = {
   "github_url": "https://github.com/li-xin-yi/",
   "search_bar_text": "Search this site...",
+  "show_toc_level": 3,
 }
 
 
@@ -65,7 +66,8 @@ myst_enable_extensions = ["dollarmath", "amsmath","linkify","deflist",
 html_sidebars = {
     "posts/**": ['searchbox.html','postcard.html','tagcloud.html','archives.html'],
     "notes": ['searchbox.html','tagcloud.html', 'archives.html'],
-    "index": ['searchbox.html','recentposts.html','tagcloud.html','archives.html',]
+    "index": ['searchbox.html','recentposts.html','tagcloud.html','archives.html',],
+     
 }
 
 blog_title = "Paper Notes"

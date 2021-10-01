@@ -15,7 +15,7 @@ blogpost: true
 
 ## Problem to Solve
 
-Bluetooth standards and their implementations are diverse and complex, which contains many functionalities that **never be required** in the common scenarios. Those useless parts actually extend the **attack surface**.
+Bluetooth standards and their implementations are diverse and complex, which contains many functionalities that **never be required** in the common scenarios. Those **useless** parts actually extend the **attack surface**.
 
 `LIGHTBLUE` is a framework that performs **automatic**, profile-aware debloating of Bluetooth stacks. It allows users to automatically minimize their Bluetooth attack surface by removing _unneeded_ Bluetooth features and introduce no performance overhead or effect on the behaviors.
 
@@ -30,7 +30,7 @@ The workflow of `LIGHTBLUE`:
 ### Profile Identification
 
 ```{admonition} Purpose
-In step 1, LIGHTBLUE first identifies the profile used by the application.
+In step 1, LIGHTBLUE first identifies what profile is used by the application.
 ```
 
 As that the host code provides **fixed interfaces** to the application so that the application can use the functionalities provided by the profile. For example:
@@ -44,7 +44,7 @@ To identify those profiles, `LIGHTBLUE` scans for these interfaces in app's code
 ### Host Code Analysis
 
 ```{admonition} Purpose
-In step 2-4, `LIGHTBLUE` analyzes the source code of the host, performing a *profile-aware dependence* analysis and generates a *profile-aware dependency* graph. Removing the code **outside** this graph, a host code is successfully **debloated**.
+In step 2-3, `LIGHTBLUE` analyzes the source code of the host, performing a *profile-aware dependence* analysis and generates a *profile-aware dependency* graph. Removing the code **outside** this graph, a host code is successfully **debloated**.
 ```
 
 Since a profile is exposed as a series of APIs/functions to the application, `LIGHTBLUE` builds the **call graph** (including all potential reachable functions in the host code) by a _conservative approach_.
@@ -71,4 +71,32 @@ bt_status_t btif_in_execute_service_request(
 ```
 ````
 
-`LIGHTBLUE` adds a dummy function invoking the different functions exposed by a specific profile to make sure the program has a **single** entry point so that existing traditional *data-flow* analysis approach can be applied to detect the exact function called in dispatching functions.
+`LIGHTBLUE` adds a dummy function invoking the different functions exposed by a specific profile to make sure the program has a **single** entry point so that existing traditional *data-flow* analysis approach can be applied to detect the exact functions called in dispatching functions: LIGHTBLUE takes the constant values within the profile interface functions as the *source*, and *propagates* them across the host code, using an approach similar to what is proposed in [TRIMMER](http://www.csl.sri.com/users/gehani/papers/ASE-2018.Trimmer.pdf). Finally, `LIGHTBLUE` scnas each functiin for conditional jumps and check if the conditional value is known. For a known conditional value, it removes the basic blocks that are only reachable from the **unsatifiable** branches, which helps build a smaller and more accurate profile-aware call graph. All code outside the profile dependency graph is removed.
+
+### HCI Command Extraction
+
+```{admonition} Purpose
+In step 4, a list of HCI (*Host Controller Interface*) commands used by the target profile is extracted, which guide to remove the unneeded functionalities in the firmware.
+```
+
+As **HCI send/receive interfaces** are well-defined, `LIGHTBLUE` can extract all HCI commands used from the dependency graph. It performs a *data-flow analysis* from all the functions in the profile dependency graph to the HCI interfaces. Then, it gets the used HCI commands by recovering the first two bytes used to generate the HCI packet.
+
+```{tip}
+The data format of HCI command:
+
+![](/images/wu2021lightblue/hci-format.png)
+
+The opcode differentiates HCI commands and has the Opcode Command Field (OCF) and the Opcode Group Field (OGF). The parameter field depends on the opcode.
+```
+
+> These two bytes contain the OGF and OCF fields of the packet, and they determine the invoked HCI command. For instance, if the first two bytes are `0x0405`, LIGHTBLUE recovers `OGF` and `OCF` by extracting the upper 6 bits and lower 10 bits. Based on the value of OGF and OCF (`0x1` and `0x5`), the HCI command is a `Create Connection` command.
+
+### Firmware Analysis and Patching
+
+```{admonition} Purpose
+With a given firmware's binary, in step 5, `LIGHTBLUE` analyzes it to find the code to handle HCI commands; in step 6, `LIGHTBLUE` can identify the interfaces for setting up different types of links based on the identified code that handles the HCI commands. In step 7. `LIGHTBLUE` patches the firmware by debloating the unneed functionalities, which includes the code handling unneeded HCI commands (according to what are extracted in step 4) and the unneeded link interfaces of profile. Finally, the output is the compiled host code and the patched firmware.
+```
+
+
+
+
