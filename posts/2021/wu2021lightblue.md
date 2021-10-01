@@ -97,6 +97,29 @@ The opcode differentiates HCI commands and has the Opcode Command Field (OCF) an
 With a given firmware's binary, in step 5, `LIGHTBLUE` analyzes it to find the code to handle HCI commands; in step 6, `LIGHTBLUE` can identify the interfaces for setting up different types of links based on the identified code that handles the HCI commands. In step 7. `LIGHTBLUE` patches the firmware by debloating the unneed functionalities, which includes the code handling unneeded HCI commands (according to what are extracted in step 4) and the unneeded link interfaces of profile. Finally, the output is the compiled host code and the patched firmware.
 ```
 
+```{attention}
+How to identify HCI command dispatcher?
+```
+
+The dispatcher often needs to perform bitwise operations to extract the `OGF` and `OCF` values from opcode during parsing. For example:
+
+```c
+bt_status_t bthci_cmd_dispatcher(PTR* hci_cmd_pkt){
+opcode = *(hci_cmd_pkt + 9);
+OGF = opcode >> 10;
+OCF = opcode & 0x3ff;
+handler = error_cmd_handler;
+switch(OGF) {
+case 0x01: switch(OCF) {
+case 0x01: handler = handle_inquiry; break;
+...}
+...
+default: // handling error HCI command
+handler = error_cmd_handler; break;}
+ handler(hci_cmd_pkt);
+}
+```
+
 
 
 
