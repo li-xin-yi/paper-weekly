@@ -101,22 +101,26 @@ With a given firmware's binary, in step 5, `LIGHTBLUE` analyzes it to find the c
 How to identify HCI command dispatcher?
 ```
 
-The dispatcher often needs to perform bitwise operations to extract the `OGF` and `OCF` values from opcode during parsing. For example:
+The HCI command dispatcher often needs to perform bitwise operations to extract the `OGF` and `OCF` values from opcode during parsing. For example:
 
-```c
+```{code-block} C
+---
+linenos:
+emphasize-lines: 2-4
+---
 bt_status_t bthci_cmd_dispatcher(PTR* hci_cmd_pkt){
-opcode = *(hci_cmd_pkt + 9);
-OGF = opcode >> 10;
-OCF = opcode & 0x3ff;
-handler = error_cmd_handler;
-switch(OGF) {
-case 0x01: switch(OCF) {
-case 0x01: handler = handle_inquiry; break;
-...}
-...
-default: // handling error HCI command
-handler = error_cmd_handler; break;}
- handler(hci_cmd_pkt);
+  opcode = *(hci_cmd_pkt + 9);
+  OGF = opcode >> 10;
+  OCF = opcode & 0x3ff;
+  handler = error_cmd_handler;
+  switch(OGF) {
+    case 0x01: switch(OCF) {
+    case 0x01: handler = handle_inquiry; break;
+    ...}
+    ...
+    default: // handling error HCI command
+      handler = error_cmd_handler; break;}
+  handler(hci_cmd_pkt);
 }
 ```
 
