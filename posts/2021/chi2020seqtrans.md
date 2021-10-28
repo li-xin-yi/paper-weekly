@@ -1,6 +1,6 @@
 ---
 date: 2021-10-20
-category: Software engineering,
+category: Software engineering
 tags: vulnerability fix, machine learning
 blogpost: true
 ---
