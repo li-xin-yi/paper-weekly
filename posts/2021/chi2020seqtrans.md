@@ -49,12 +49,74 @@ Then it extract data flow dependencies around code diffs to construct our def-us
 - All statements that have data dependencies on the vulnerable statement will
 be retained
 
+`````{panels}
+
+---
+`Test.java`: source
+
+```java
+class Foo {
+    int i;
+    int k;
+    String test;
+    public void clear(String test){
+        test = "";
+        }
+    private String foo(int i, int k) {
+        if(i == k) return i-k;
+        }
+    }
+```
+
+---
+
+`Test.java`: buggy body
+
+```java
+int i;
+int k;
+String test;
+private String foo(int i, int k) {
+    if(i == k) return i-k;
+    }
+```
+
+
+`````
+
 #### Normalization & Tokenization
+
+
 
 To reduce the vocabulary size:
 
 - **Normalization**: replace value by tokens
-- **Tokenization**: Byte Pair Encoding to replace several tokens into one 
+- **Tokenization**: Byte Pair Encoding to replace several tokens into one
+
+
+````{panels}
+
+---
+
+`Test.java`: source
+
+```java
+private String foo(int i, int k) {
+    if(i == 0) return "Foo!";
+    if(k == 1) return 0;}
+```
+
+---
+
+`Test.java`: normalized source
+
+```java
+private String foo(int var1, int var2) {
+    if(var1 == num1) return "str";
+    if(var2 == num2) return num1;}
+```
+
+````
 
 ### Pre-train and tune
 

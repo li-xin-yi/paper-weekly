@@ -1,7 +1,7 @@
 ---
 date: 2021-10-27
 category: Software engineering
-tags: A Survey on Fuzzing
+tags: fuzz
 blogpost: true
 ---
 
@@ -25,6 +25,18 @@ blogpost: true
 
 ![](/images/fuzz/afl-screenshot.png)
 
+- Edge coverage: Inputs that cover **new branch(es)** will be added to the seed pool.
+
+- test harness: wrap functions to narrow down the fuzzing range
+
+![](/images/fuzz/harness.png)
+
+## Some papers
+
+- **[Reinforcement Learning-based Hierarchical Seed Scheduling for Greybox Fuzzing](https://scholar.archive.org/work/sxi4fekp2rdizcv3ad7itgg4vy/access/wayback/https://www.ndss-symposium.org/wp-content/uploads/ndss2021_6A-4_24486_paper.pdf)** *(NDSS'21)*
+- [Android SmartTVs Vulnerability Discovery via Log-Guided Fuzzing](https://www.usenix.org/system/files/sec21fall-aafer.pdf) *(USENIX Security'21)*
+- [Send Hardest Problems My Way: Probabilistic Path Prioritization for Hybrid Fuzzing](https://www.cs.ucr.edu/~heng/pubs/digfuzz_ndss19.pdf) *(NDSS'21)*
+- [VDF: Targeted Evolutionary Fuzz Testing of Virtual Devices](https://www.cs.ucr.edu/~heng/pubs/VDF_raid17.pdf)
 
 
 ## Miscellaneous
