@@ -70,3 +70,7 @@ div.timeline div.entry.left::after {
 div.timeline div.entry.right::after {
     left: -.5em;
 }
+
+:root{
+    --pst-font-size-base: 16px; 
+}

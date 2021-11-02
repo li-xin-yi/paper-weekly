@@ -38,6 +38,31 @@ blogpost: true
 - [Send Hardest Problems My Way: Probabilistic Path Prioritization for Hybrid Fuzzing](https://www.cs.ucr.edu/~heng/pubs/digfuzz_ndss19.pdf) *(NDSS'21)*
 - [VDF: Targeted Evolutionary Fuzz Testing of Virtual Devices](https://www.cs.ucr.edu/~heng/pubs/VDF_raid17.pdf)
 
+## Basic Notes
+  
+### Greybox Fuzzing
+
+`````{panels}
+
+---
+
+**Black‐box fuzzing**:
+
+- Treating the system as a **blackbox** during fuzzing;
+- **not knowing** details of the implementation;
+- Feed the program **random** inputs and see if it crashes;
+
+---
+
+**White‐box fuzzing**:
+
+- Design fuzzing based on internals of the system;
+- Combines **test generation** with fuzzing (*static analysis*/*symbolic execution*);
+- Goal: Given a sequential program with a set of input parameters, generate a set of inputs that maximizes code coverage
+
+
+`````
+
 
 ## Miscellaneous
 
