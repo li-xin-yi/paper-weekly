@@ -85,8 +85,12 @@ The details of a generitic fuzzing process can be described as:
 4. Test cases are generated through (random) mutation and crossover based on the scheduled seed; *(Line 9)*
 5. Compared to blackbox and whitebox fuzzing, the most distinctive step of greybox
 fuzzing is that, **when executing a newly generated input $I$, the fuzzer uses lightweight instrumentations to capture runtime features and expose them to the fitness function to measure the "quality" of a generated test case** ;
+
+```{note}
   - Test cases with good quality will then be saved as a new seed into the seed pool. *(Line 13-14)*
   - This step allows a greybox to gradually evolve towards a target (e.g., more coverage).
+```
+
 
 
 
