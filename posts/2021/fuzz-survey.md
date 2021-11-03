@@ -27,7 +27,7 @@ blogpost: true
 
 - Edge coverage: Inputs that cover **new branch(es)** will be added to the seed pool.
 
-- test harness: wrap functions to narrow down the fuzzing range
+- Test Harness: wrap functions to narrow down the fuzzing range
 
 ![](/images/fuzz/harness.png)
 
@@ -40,7 +40,7 @@ blogpost: true
 
 ## Basic Notes
   
-### Greybox Fuzzing
+
 
 `````{panels}
 
@@ -62,6 +62,33 @@ blogpost: true
 
 
 `````
+
+### Greybox Fuzzing
+
+Grey‐box fuzzing is also called *coverage‐Based fuzzing*. It instruments the program, instead of simply treating the program as a black-box, to trace coverage (e.g. path, edge, code, etc.)
+
+![](/images/fuzz/greybox-fuzz-workflow.png)
+
+1. New inputs are generated through *mutation* and *crossover/splice* on seeds;
+    - Only a few inputs from the seed pool will be scheduled to generate the next batch of inputs (due to the limited processing capability)
+    - *For example, a single fuzzer instance can only schedule one seed at a time*
+2. The generated inputs are selected according to a *fitness function*;
+3. Selected inputs are then added back to the seed pool for further mutation;
+
+The details of a generitic fuzzing process can be described as:
+
+![](/images/fuzz/greybox-algo.png)
+
+1. Given a program $P$ and a set of initial seeds $S^0$ *(Input)*;
+2. Each round starts with selecting the next seed for fuzzing according to the *scheduling criteria*; *(Line 5)*
+3. Assign a certain amount of *power* to the scheduled seed, determining how many new test cases will be generated; *(Line 6)*
+4. Test cases are generated through (random) mutation and crossover based on the scheduled seed; *(Line 9)*
+5. Compared to blackbox and whitebox fuzzing, the most distinctive step of greybox
+fuzzing is that, **when executing a newly generated input $I$, the fuzzer uses lightweight instrumentations to capture runtime features and expose them to the fitness function to measure the "quality" of a generated test case** ;
+  - Test cases with good quality will then be saved as a new seed into the seed pool. *(Line 13-14)*
+  - This step allows a greybox to gradually evolve towards a target (e.g., more coverage).
+
+
 
 
 ## Miscellaneous
