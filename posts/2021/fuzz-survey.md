@@ -1,7 +1,7 @@
 ---
 date: 2021-10-27
-category: Software engineering
-tags: fuzz
+category: Software Engineering
+tags: Fuzzing
 blogpost: true
 ---
 

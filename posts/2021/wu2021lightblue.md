@@ -1,7 +1,7 @@
 ---
 date: 2021-9-25
-category: firmware
-tags: firmware analysis, symbolic execution
+category: Firmware
+tags: Firmware Analysis, Symbolic Execution
 blogpost: true
 ---
 
