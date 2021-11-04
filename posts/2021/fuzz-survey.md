@@ -23,6 +23,20 @@ blogpost: true
 
 ## Tool: AFL
 
+```{seealso}
+Understanding the status screen: https://afl-1.readthedocs.io/en/latest/user_guide.html
+- **Total crashes**: the number of different inputs that cause a crash. **unique** means the occurance of this crash takes a different execution path through the program. (not *unique bugs*)
+- **Total paths**: unique execution path driven by all inputs.
+- **Hangs:** timeout caused by the inputs.
+- **Total execs**: the total number of executions. (i.e. how many times the program is executed)
+- **Map coverage**: it maintains a global map where the hashed value of an edge (i.e., the pair of the current basic block address and the next basic block address) is used as an
+indexing key.
+  - observed by the instrumentation embedded in the target binary
+  - **map density** shows how many branch tuples it have alreadly hit (for current input), in proportion to how many the bitmap can hold (for the entire input corpus).
+  - **count coverage**: indicates the *variability* in tuple hit counts seen in the binary.
+    - *In essence, if every taken branch is always taken a fixed number of times for all the inputs we have tried, this will read "1.00". As we manage to trigger other hit counts for every branch, the needle will start to move toward "8.00" (every bit in the 8-bit map hit), but will probably never reach that extreme.*
+```
+
 ![](/images/fuzz/afl-screenshot.png)
 
 - Edge coverage: Inputs that cover **new branch(es)** will be added to the seed pool.
@@ -75,11 +89,11 @@ Grey‐box fuzzing is also called *coverage‐Based fuzzing*. It instruments the
 2. The generated inputs are selected according to a *fitness function*;
 3. Selected inputs are then added back to the seed pool for further mutation;
 
-The details of a generitic fuzzing process can be described as:
+The details of a genetic fuzzing process can be described as:
 
 ![](/images/fuzz/greybox-algo.png)
 
-1. Given a program $P$ and a set of initial seeds $S^0$ *(Input)*;
+1. Given a program $P$ and a set of initial seeds $S^0$; *(Input)*
 2. Each round starts with selecting the next seed for fuzzing according to the *scheduling criteria*; *(Line 5)*
 3. Assign a certain amount of *power* to the scheduled seed, determining how many new test cases will be generated; *(Line 6)*
 4. Test cases are generated through (random) mutation and crossover based on the scheduled seed; *(Line 9)*
@@ -87,7 +101,7 @@ The details of a generitic fuzzing process can be described as:
 fuzzing is that, **when executing a newly generated input $I$, the fuzzer uses lightweight instrumentations to capture runtime features and expose them to the fitness function to measure the "quality" of a generated test case** ;
 
 ```{note}
-  - Test cases with good quality will then be saved as a new seed into the seed pool. *(Line 13-14)*
+  - Test cases with good quality will then be saved as a new seed into the seed pool; *(Line 13-14)*
   - This step allows a greybox to gradually evolve towards a target (e.g., more coverage).
 ```
 
