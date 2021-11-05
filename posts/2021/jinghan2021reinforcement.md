@@ -185,7 +185,7 @@ Notation | Explanation
 `fcov[s,l,t]` | a feature set that consists of all features covered at levels `l` by
 `SeedReward(s,l,t)` | The max rareness value of `F` in `fcov[s,l,t]`
 $Reward(a^l,t)$ | assume $(a^1,\ldots, a^{n+1})$ is the sequence of nodes selected at round $t$, the reward of the scheduling node $a^l$ at round $t$ is caclculated by the geometric mean of `SeedReward` the following (lower) nodes (i.e. $\sqrt[n-l+1]{\prod_{k=l}^{n} SeedRewards(s,k,t)}$)
-`Q(a,t)` | \frac{Reward(a,t)+w\times Q(a,t^\prime) \times \sum_{p=0}^{N[a,t]-1}{w^p}}{1+w\times\sum_{p=0}^{N[a,t]-1}{w^p}} it progressively decreases the weight to the previous mean reward in order to give higher weights to newer rewards, discount factor $w$ is empirically set to 0.5.
+`Q(a,t)` | $\frac{Reward(a,t)+w\times Q(a,t^\prime) \times \sum_{p=0}^{N[a,t]-1}{w^p}}{1+w\times\sum_{p=0}^{N[a,t]-1}{w^p}}$ it progressively decreases the weight to the previous mean reward in order to give higher weights to newer rewards, discount factor $w$ is empirically set to 0.5.
 `U(a)` | $C \times \sqrt{\frac{Y[a]}{Y[a^\prime]}} \times \sqrt{\frac{log N[a^\prime]}{N[a]}}$, $Y$ denotes number of seeds in the cluster, $N$ denotes the times has been selected so far
 `SeedRareness(s,l)` | $\sqrt{\frac{\sum_{F \in C_l(P,s)}^{}{rareness^2[F]}}{\|\{F:F \in C_l(P,s)\}\|}}$
 $Rareness(a^l)$ | `SeedRareness(s,l)` 
