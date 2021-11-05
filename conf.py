@@ -31,7 +31,7 @@ author = 'Xinyi Li'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ["myst_parser",'sphinx_panels', 'sphinx.ext.viewcode', 'sphinx_copybutton', "sphinx.ext.autodoc",
-              "sphinx.ext.autosummary", "ablog", "sphinxext.opengraph","sphinx_togglebutton"]
+              "sphinx.ext.autosummary", "ablog", "sphinxext.opengraph"]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = [ablog.get_html_templates_path()]
 
