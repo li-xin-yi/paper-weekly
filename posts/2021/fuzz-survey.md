@@ -51,6 +51,7 @@ indexing key.
 - [Android SmartTVs Vulnerability Discovery via Log-Guided Fuzzing](https://www.usenix.org/system/files/sec21fall-aafer.pdf) *(USENIX Security'21)*
 - [Send Hardest Problems My Way: Probabilistic Path Prioritization for Hybrid Fuzzing](https://www.cs.ucr.edu/~heng/pubs/digfuzz_ndss19.pdf) *(NDSS'21)*
 - [VDF: Targeted Evolutionary Fuzz Testing of Virtual Devices](https://www.cs.ucr.edu/~heng/pubs/VDF_raid17.pdf)
+- [FuzzGen: Automatic Fuzzer Generation](https://www.usenix.org/conference/usenixsecurity20/presentation/ispoglou)
 
 ## Basic Notes
   
