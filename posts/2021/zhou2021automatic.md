@@ -17,11 +17,21 @@ Link: https://www.usenix.org/conference/usenixsecurity21/presentation/zhou
 - Code: https://github.com/MCUSec/uEmu
 - Environment: Azure Counter-Small Ubuntu 20.04
 
-Install Vagrant
+#### Install Vagrant
 
 ```
 sudo apt-install virtualbox vagrant
 ```
+
+#### Download `uEmu`
+
+```
+git clone https://github.com/MCUSec/uEmu.git
+cd uEmu
+```
+
+Modify the RAM allocation in `uEmu/Vagrantfile` to 8194 MB, or it may fail to build `afl-fuzz`:
+
 
 Start a vritual machine from the vagrant file in the repo:
 
@@ -31,5 +41,6 @@ cd uEmu
 vagrant up  # this will take a while, please be patient
 vagrant ssh # connect to the virtual machine
 ```
+
 
 
