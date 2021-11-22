@@ -50,7 +50,13 @@ vagrant ssh # connect to the virtual machine
 
 Now, you will enter the virtual machine:
 
-#### Install AFL ++
+![](/images/uEmu/vagrant.png)
+
+#### Install AFL ++ \*
+
+```{note}
+Usually, when you build the vagrant VM with 8 GB RAM, it will build `afl-fuzz` automatically (so the process may last for 3+ hrs). In this case, **just ignore this subsection**. However if you have difficulties with allocating RAM more than 4 GB, the `afl-fuzz` may also fail to build due to the limited RAM.
+```
 
 From the [readme](https://github.com/AFLplusplus/AFLplusplus#building-and-installing-afl) of AFL ++
 
@@ -89,6 +95,8 @@ sudo apt-get install ninja-build
 - https://github.com/MCUSec/uEmu-real_world_firmware
 
 ### Usages
+
+Copy 
 
 
 
