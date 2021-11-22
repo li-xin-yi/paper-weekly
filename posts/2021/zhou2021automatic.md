@@ -48,11 +48,15 @@ vagrant up  # this will take a while, please be patient
 vagrant ssh # connect to the virtual machine
 ```
 
+
+
 Now, you will enter the virtual machine:
 
 ![](/images/uEmu/vagrant.png)
 
-#### Install AFL ++ \*
+`pwd` is `/home/vagrant`, the `uEmu/` folder on the host is mounted into `/vagrant/` folder on the vagrant VM. 
+
+`````{dropdown}  **Install AFL ++** \*
 
 ```{note}
 Usually, when you build the vagrant VM with 8 GB RAM, it will build `afl-fuzz` automatically (so the process may last for 3+ hrs). In this case, **just ignore this subsection**. However if you have difficulties with allocating RAM more than 4 GB, the `afl-fuzz` may also fail to build due to the limited RAM.
@@ -86,13 +90,58 @@ If it says that `ninja: command not found`, install `ninja` by:
 sudo apt-get install ninja-build
 ```
 ````
+`````
 
-#### Access from VS code
+`````{dropdown} **Access vagrant VM from VS code** \*
+Although the host and VM share a mounted folder (`uEmu` / `/vagrant/`), which can be used to transfer files between them. To view the file strcuture clearly and edit files easily, we can also configure our VS code editor for remotely accessing the VM directly.
+
+Print out the ssh configuration of the vagrant VM from the host terminal:
+
+```sh
+$ vagrant ssh-config
+# Host default
+#   HostName 127.0.0.1
+#   User vagrant
+#   Port 2222
+#   UserKnownHostsFile /dev/null
+#   StrictHostKeyChecking no
+#   PasswordAuthentication no
+#   IdentityFile /path/to/private_key
+#   IdentitiesOnly yes
+#   LogLevel FATAL
+```
+
+Copy the output to your `~/.ssh/config` file, change hostname `default` to whatever you like to distinguish it from other hosts (e.g. I use `vagrant`).
+
+Install [Remote SSH extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh) for VS code, click here (on the bottom bar of VS) code window:
+
+![](/images/uEmu/connect.png)
+
+Then select "connect to host":
+
+![](/images/uEmu/vs-ssh.png)
+
+And choose "vagrant" host, open the `/vagrant` folder (or any other folder), then you can view and edit files like what you do on your local machine:
+
+![](/images/uEmu/vs-remote.png)
+
+````{note}
+If your host is a remote host (like me, I also use Azure VM to test it), you have to first forward your local host to corresponding remote host port, for example:
+
+```sh
+ssh -N -f -L localhost:2222:localhost:2222 your-remote-host
+```
+
+Don't forget to download the private key file to your local path and specify it in your local `~/.ssh/config` file.
+````
+`````
 
 ### Test Firmwares (`.cfg` included)
 
 - https://github.com/MCUSec/uEmu-unit_tests
 - https://github.com/MCUSec/uEmu-real_world_firmware
+
+
 
 ### Usages
 

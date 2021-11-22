@@ -70,9 +70,12 @@ html_sidebars = {
      
 }
 
+html_css_files = ["https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"]
+
 blog_title = "Paper Notes"
 
 blog_path = "notes"
+# fontawesome_included = True
 fontawesome_included = True
 
 blog_post_pattern = "posts/*/*"
