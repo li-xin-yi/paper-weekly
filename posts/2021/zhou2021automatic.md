@@ -141,13 +141,101 @@ Don't forget to download the private key file to your local path and specify it 
 - https://github.com/MCUSec/uEmu-unit_tests
 - https://github.com/MCUSec/uEmu-real_world_firmware
 
-
+Use `git clone` to clone them into the local space.
 
 ### Usages
 
-Copy 
+Since `launch-uEmu-template.sh`, `launch-AFL-template.sh`, `uEmu-config-template.lua` and `library.lua` must be placed in the same *work path* with the binary to test, First copy those files along with `uEmu-helper.py` into folder, for example:
+
+```
+cd /vagrant
+cp launch-uEmu-template.sh launch-AFL-template.sh uEmu-config-template.lua library.lua uEmu-helper.py ~/uEmu-real_world_firmware
+```
+
+Enter the firmware folder:
+
+```
+cd ~/uEmu-real_world_firmware
+```
+
+#### Example: `P2IM.Drone.elf`
+
+Extract KB:
+
+```sh
+python3 uEmu-helper.py P2IM.Drone.elf P2IM_Drone.cfg
+```
+
+Ignore the warnings. `launch-uEmu.sh` and `uEmu-config.lua` are generated from this command. Run `launch-uEmu.sh` to generate knowledge base (KB) file:
+
+```sh
+./launch-uEmu.sh
+```
+
+It mainly runs `S2E` for symbolic execution. Wait for a few minutes:
+
+![](/images/uEmu/kb_extract.png)
 
 
+A KB file `P2IM.Drone.elf-round1-state10-tbnum1371_KB.dat` (some numbers may differ) will be produced in `s2e-last`, copy it into `./` and then start dynamic analysis and fuzzing:
+
+````{error}
+Don't specify kb file like `s2e-last/P2IM.Drone.elf-round1-state10-tbnum1371_KB.dat` when generating `launch-AFL.sh` because the `s2e-last` will be overriden by outputs of the last execution of `s2e`, as `s2e` will be serve as dynamic analyzer when fuzzing, the KB file might not be found when executing fuzzing and dynamic analysis. Copy the file out or use `s2e-out-xxx/xxx` as its path.
+````
+
+```sh
+python3 uEmu-helper.py P2IM.Drone.elf P2IM_Drone.cfg -kb P2IM.Drone.elf-round1-state10-tbnum1371_KB.dat 
+```
+
+A `./launch-AFL.sh` appears after runing the command. 
 
 
+#### Example: XML_Parser
 
+After reading `git log` of `uEmu-real_world_firmware`, I found that `WYCNINWYC` in the docs example is actually changed as `XML_Parser`. So I use it as an example here to run.
+
+Extract KB:
+
+```
+python3 uEmu-helper.py XML_Parser.elf XML_Parser.cfg
+```
+
+Get `launch-uEmu.sh` and run it:
+
+```
+./launch-uEmu.sh
+```
+
+Get the KB file, copy it into `pwd` and generate AFL file:
+
+```
+cp s2e-last/XML_Parser.elf-round1-state51-tbnum1061_KB.dat ./
+python3 uEmu-helper.py XML_Parser.elf XML_Parser.cfg -kb XML_Parser.elf-round1-state51-tbnum1061_KB.dat -s small_document.xml
+```
+
+Get `launch-AFL.sh` script, to run the fuzzing and dynamic analysis simultaneously, you need to start two terminals as:
+
+````{panels}
+**Terminal 1**
+
+- Fuzzing (AFL)
+- Input test-cases 
+
+```
+./launch-AFL.sh
+```
+
+---
+
+**Terminal 2**
+
+- Dynamic analysis (S2E)
+- Consume test-cases
+
+```
+./launch-uEmu.sh
+```
+
+````
+
+![](/images/uEmu/split.png)
