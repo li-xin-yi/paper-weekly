@@ -22,6 +22,10 @@ Link: https://www.usenix.org/conference/usenixsecurity21/presentation/zhou
 sudo apt-get install virtualbox vagrant
 ```
 
+````{error}
+If `virtualbox --version` gives an error as `The character device /dev/vboxdrv does not exist. Please install the virtualbox-dkms package and the appropriate headers, most likely linux-headers-generic.`, try to disable secure boot in [BIOS configuration](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/disabling-secure-boot?view=windows-11) and rebot.
+````
+
 #### Download `uEmu`
 
 ```sh
@@ -126,7 +130,7 @@ And choose "vagrant" host, open the `/vagrant` folder (or any other folder), the
 ![](/images/uEmu/vs-remote.png)
 
 ````{note}
-If your host is a remote host (like me, I also use Azure VM to test it), you have to first forward your local host to corresponding remote host port, for example:
+If your host is a remote host (like me, I also use Azure VM to test it), you have to first forward your local host port to corresponding remote host port, for example:
 
 ```sh
 ssh -N -f -L localhost:2222:localhost:2222 your-remote-host
@@ -180,14 +184,14 @@ It mainly runs `S2E` for symbolic execution. Wait for a few minutes:
 A KB file `P2IM.Drone.elf-round1-state10-tbnum1371_KB.dat` (some numbers may differ) will be produced in `s2e-last`, copy it into `./` and then start dynamic analysis and fuzzing:
 
 ````{error}
-Don't specify kb file like `s2e-last/P2IM.Drone.elf-round1-state10-tbnum1371_KB.dat` when generating `launch-AFL.sh` because the `s2e-last` will be overriden by outputs of the last execution of `s2e`, as `s2e` will be serve as dynamic analyzer when fuzzing, the KB file might not be found when executing fuzzing and dynamic analysis. Copy the file out or use `s2e-out-xxx/xxx` as its path.
+Don't specify kb file like `s2e-last/P2IM.Drone.elf-round1-state10-tbnum1371_KB.dat` when generating `launch-AFL.sh` because the `s2e-last` will be overridden by outputs of the last execution of `s2e`, as `s2e` will serve as dynamic analyzer when fuzzing, the KB file might not be found when executing fuzzing and dynamic analysis. Copy the file out or use `s2e-out-xxx/xxx` as its path.
 ````
 
 ```sh
 python3 uEmu-helper.py P2IM.Drone.elf P2IM_Drone.cfg -kb P2IM.Drone.elf-round1-state10-tbnum1371_KB.dat 
 ```
 
-A `./launch-AFL.sh` appears after runing the command. 
+A `./launch-AFL.sh` appears after running the command. 
 
 
 #### Example: XML_Parser
@@ -239,3 +243,5 @@ Get `launch-AFL.sh` script, to run the fuzzing and dynamic analysis simultaneous
 ````
 
 ![](/images/uEmu/split.png)
+
+When terminating AFL, the other process will end automatically.
