@@ -245,3 +245,11 @@ Get `launch-AFL.sh` script, to run the fuzzing and dynamic analysis simultaneous
 ![](/images/uEmu/split.png)
 
 When terminating AFL, the other process will end automatically.
+
+## Code Analysis
+
+[`uEmu-helper.py`](https://github.com/MCUSec/uEmu/blob/main/uEmu-helper.py): Read the firmware name, configuration (,and knowledge base file, seed file) from CLI, fill out placeholders in 
+
+- [`launch-uEmu-template.sh`](https://github.com/MCUSec/uEmu/blob/main/launch-uEmu-template.sh) to generate specified `launch-uEmu.sh`,
+-  `launch-AFL-template.sh` to generate `launch-AFL.sh`, 
+-  `uEmu-config-template.lua` to generate `uEmu-config.lua`, which is used in `launch-uEmu-template.sh` as S2E configuration file (actually useless except in debug mode)
