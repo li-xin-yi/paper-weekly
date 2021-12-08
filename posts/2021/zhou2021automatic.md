@@ -7,7 +7,7 @@ blogpost: true
 
 # Automatic Firmware Emulation through Invalidity-guided Knowledge Inference
 
-Link: https://www.usenix.org/conference/usenixsecurity21/presentation/zhou
+Link: https://www.usenix.org/confere/usenixsecurity21/presentation/zhou
 
 ## Code Utilization Attempts
 
@@ -145,6 +145,10 @@ Don't forget to download the private key file to your local path and specify it 
 - https://github.com/MCUSec/uEmu-unit_tests
 - https://github.com/MCUSec/uEmu-real_world_firmware
 
+My re-organized real world firmware repo:
+
+- https://github.com/li-xin-yi/uEmu-real_world_firmware
+
 Use `git clone` to clone them into the local space.
 
 ### Usages
@@ -245,6 +249,19 @@ Get `launch-AFL.sh` script, to run the fuzzing and dynamic analysis simultaneous
 ![](/images/uEmu/split.png)
 
 When terminating AFL, the other process will end automatically.
+
+### Reproduce the vulnerabilities
+
+It is mentioned in the paper that uEmu helps in finding two previously unknown bugs in `Steering_Control` and $\mu$`TaskerUSB`.
+
+#### $\mu$`TaskerUSB`
+
+> The bug is caused by *out-of-bound write*. The USB driver only uses a receive buffer of 512 bytes to read an input of up to 1,024 bytes, resulting in DoS or data corruption.
+
+```
+python3 uEmu-helper.py uEmu-real_world_firmware/uEmu/uEmu_utasker_USB/uEmu.uTasker_USB.out uEmu-real_world_firmware/uEmu/uEmu_utasker_USB/uEmu_utasker_USB.cfg
+./launch-uEmu.sh
+```
 
 ## Code Analysis
 
