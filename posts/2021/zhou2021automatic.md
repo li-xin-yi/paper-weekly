@@ -261,11 +261,49 @@ It is mentioned in the paper that uEmu helps in finding two previously unknown b
 ```
 python3 uEmu-helper.py uEmu-real_world_firmware/uEmu/uEmu_utasker_USB/uEmu.uTasker_USB.out uEmu-real_world_firmware/uEmu/uEmu_utasker_USB/uEmu_utasker_USB.cfg
 ./launch-uEmu.sh
+cp s2e-last/3/uEmu.uTasker_USB.out-round1-state4086-tbnum1019_KB.dat ./
+python3 uEmu-helper.py uEmu-real_world_firmware/uEmu/uEmu_utasker_USB/uEmu.uTasker_USB.out uEmu-real_world_firmware/uEmu/uEmu_utasker_USB/uEmu_utasker_USB.cfg -kb uEmu.uTasker_USB.out-round1-state4086-tbnum1019_KB.dat 
+```
+
+```{caution}
+I modified `S2E_MAX_PROCESSES` as 4 in `launch-uEmu.sh` to make S2E run in 4 workers, but it still took 7695s to finish, which is much longer than the time (227s) marked in the paper. (I have already re-launched the vagrant VM with 16 cores and 48 GB RAM).
+
+Related issue: https://github.com/MCUSec/uEmu/issues/8
+```
+
+Then start two screens to run `./launch-uEmu.sh` and `./launch-AFL.sh` respectively. After about 7 hours, it found some crashes as:
+
+![](/images/uEmu/usb.png)
+
+And a bunch of identical warnings in `s2e-last/warnings.txt` like:
+
+```
+AFLFuzzer: Kill Fuzz State due to out of bound read, access address = 0x21 pc = 0x800f7d8
+```
+
+```{note}
+TODO: I don't have the source code of this firmware (*may be [this one](https://github.com/uTasker/uTasker-Kinetis/blob/master/uTasker/USB_drv.c)*) and can't locate the bug.
+
+- I uploaded the binary to an online disassembler: https://onlinedisassembler.com/odaweb/WynTPuPS , and try to find out what instruction at `0x800f7d8` (it looks like jump to an external function at address `0x808dc24` as `BLCS` may refer to a conditional jump)
+- Run the firmware with QEMU to see the crash
+
+![](/images/uEmu/800f7d8.png)
+```
+
+###  `Steering_Control` 
+
+Source: https://github.com/RiS3-Lab/p2im-real_firmware/tree/master/Steering_Control
+
+
+
+```
+python3 uEmu-helper.py uEmu-real_world_firmware/P2IM/P2IM_Steering_Control/P2IM.Steering_Control.elf uEmu-real_world_firmware/P2IM/P2IM_Steering_Control/P2IM_Steering_Control.cfg
+./launch-uEmu.sh
 ```
 
 ## Code Analysis
 
-[`uEmu-helper.py`](https://github.com/MCUSec/uEmu/blob/main/uEmu-helper.py): Read the firmware name, configuration (,and knowledge base file, seed file) from CLI, fill out placeholders in 
+[`uEmu-helper.py`](https://github.com/MCUSec/uEmu/blob/main/uEmu-helper.py): Read the firmware name, configuration (and knowledge base file, seed file) from CLI, fill out placeholders in 
 
 - [`launch-uEmu-template.sh`](https://github.com/MCUSec/uEmu/blob/main/launch-uEmu-template.sh) to generate specified `launch-uEmu.sh`,
 -  `launch-AFL-template.sh` to generate `launch-AFL.sh`, 
