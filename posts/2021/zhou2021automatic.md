@@ -290,7 +290,7 @@ TODO: I don't have the source code of this firmware (*may be [this one](https://
 ![](/images/uEmu/800f7d8.png)
 ```
 
-###  `Steering_Control` 
+####  `Steering_Control` 
 
 Source: https://github.com/RiS3-Lab/p2im-real_firmware/tree/master/Steering_Control
 
