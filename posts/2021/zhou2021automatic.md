@@ -268,6 +268,8 @@ python3 uEmu-helper.py uEmu-real_world_firmware/uEmu/uEmu_utasker_USB/uEmu.uTask
 ```{caution}
 I modified `S2E_MAX_PROCESSES` as 4 in `launch-uEmu.sh` to make S2E run in 4 workers, but it still took 7695s to finish, which is much longer than the time (227s) marked in the paper. (I have already re-launched the vagrant VM with 16 cores and 48 GB RAM).
 
+**Then I reverted `S2E_MAX_PROCESSES` to 1 and found it runs even faster, which is really weird.**
+
 Related issue: https://github.com/MCUSec/uEmu/issues/8
 ```
 
@@ -327,6 +329,40 @@ I have almost no knowledge about Arduino, but at least for C/C++ (see [`std::str
 ```
 python3 uEmu-helper.py uEmu-real_world_firmware/P2IM/P2IM_Steering_Control/P2IM.Steering_Control.elf uEmu-real_world_firmware/P2IM/P2IM_Steering_Control/P2IM_Steering_Control.cfg
 ./launch-uEmu.sh
+```
+
+Copy out the `P2IM.Steering_Control.elf-round1-state0-tbnum385_KB.dat` run 
+
+```
+python3 uEmu-helper.py uEmu-real_world_firmware/P2IM/P2IM_Steering_Control/P2IM.Steering_Control.elf uEmu-real_world_firmware/P2IM/P2IM_Steering_Control/P2IM_Steering_Control.cfg -kb P2IM.Steering_Control.elf-round1-state0-tbnum385_KB.dat
+```
+
+Then run the two processes mentioned above on different screens.
+
+Frankly speaking, I let the AFL-fuzzer over night but it never crashed.
+
+![](/images/uEmu/steer-afl.png)
+
+To view the last few lines of `s2e-last/warning.txt` file:
+
+```sh
+tail -100 s2e-last/warning.txt
+# AFLFuzzer: 1 what happen when we are hang at pc = 0x811d4, maybe add it as a crash point
+# AFLFuzzer: 1 what happen when we are hang at pc = 0x8125e, maybe add it as a crash point
+# AFLFuzzer: 1 what happen when we are hang at pc = 0x8127a, maybe add it as a crash point
+# AFLFuzzer: 1 what happen when we are hang at pc = 0x811d8, maybe add it as a crash point
+# AFLFuzzer: 1 what happen when we are hang at pc = 0x811da, maybe add it as a crash point
+# AFLFuzzer: 1 what happen when we are hang at pc = 0x80ee0, maybe add it as a crash point
+# AFLFuzzer: 1 what happen when we are hang at pc = 0x816b8, maybe add it as a crash point
+# AFLFuzzer: 1 what happen when we are hang at pc = 0x811e6, maybe add it as a crash point
+# AFLFuzzer: 0 what happen when we are hang at pc = 0x8071a, maybe add it as a crash point
+# AFLFuzzer: 0 what happen when we are hang at pc = 0x813ca, maybe add it as a crash point
+```
+
+It may indicate the existence of this bug. 
+
+```{note}
+Anyway, in my opinion, the bug is hard to trigger because it requires the returned string from [`Serial.readStringUntil()`](https://www.arduino.cc/reference/en/language/functions/communication/serial/readstringuntil/) to be freed before the program ends, which never occurs in runtime and prevents us from verifying the consequence via a fuzzer. I doubt if this bug was indeed  discovered by the dynamic method proposed in this paper.~~ Even though I totally agree that it is a terrible coding style to directly assign reading buffer to dynamic memory.
 ```
 
 ## Code Analysis
