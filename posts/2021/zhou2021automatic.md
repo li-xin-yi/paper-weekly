@@ -294,6 +294,34 @@ TODO: I don't have the source code of this firmware (*may be [this one](https://
 
 Source: https://github.com/RiS3-Lab/p2im-real_firmware/tree/master/Steering_Control
 
+> It is caused by a double-free of a string buffer, allowing for arbitrary write. More specifically, the firmware uses dynamic memory to store the received data from the serial port. If the memory allocation fails, the same buffer will be freed twice. 
+
+`````{hint}
+I guess it may refer to [L131-132](https://github.com/RiS3-Lab/p2im-real_firmware/blob/d4c7456574ce2c2ed038e6f14fea8e3142b3c1f7/Steering_Control/car_controller.ino#L131). As `command` and `value` are declared as `String`s:
+
+```{code-block} cpp
+---
+linenos:
+lineno-start: 58
+---
+String command; //Keep track of our command as it comes in
+String value;
+```
+
+But assigned with `String`s read from `Serial`
+
+```{code-block} cpp
+---
+linenos:
+lineno-start: 131
+---
+      command = Serial.readStringUntil(','); //Read all of the command
+      value = Serial.readStringUntil('\n'); //Read all of the value to set
+```
+
+I have almost no knowledge about Arduino, but at least for C/C++ (see [`std::string::operator=`](https://www.cplusplus.com/reference/string/string/operator=/)), `String` is allocated dynamically as it has undetermined length, `=` only copies the reference shallowly. When the *moved* string is deleted, it will issue an error when deleting `command` and `value` again, which happens automatically when the two variables are deconstructed. 
+
+`````
 
 
 ```
