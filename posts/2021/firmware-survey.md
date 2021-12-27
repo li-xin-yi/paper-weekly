@@ -7,6 +7,8 @@ blogpost: true
 
 # A Survey on Firmware Security
 
+## List Summary
+
 Paper List:
 - https://github.com/onehouwong/Firmware-Analysis-Papershttps://github.com/onehouwong/Firmware-Analysis-Papers 
 
@@ -15,3 +17,32 @@ Course:
 
 Toolkit:
 - https://github.com/attify/firmware-analysis-toolkit
+
+## Binary Analysis
+
+From [this slides](https://mews.sv.cmu.edu/teaching/14829/f18/files/firmware-analysis-tutorial.pdf), we can view firmware releases as some kind of *executable binaries*, so many binary analysis (*especially some black-box*) techniques can also be applied on firmware. Those tools can give a quick insight on the firmware to analysis. To demonstrate these CLI on Linux, we can take samples in [my re-organized firmware collection](https://github.com/li-xin-yi/uEmu-real_world_firmware) as examples and then test with those tools.
+
+
+<!-- Command | Usage | Note
+---------|----------|---------
+`file` | Test file type (format) |  If the file format of the provided firmware image is unknown, then `file` will simply report that it contains binary data -->
+
+
+````{list-table}
+:header-rows: 1
+:widths: 5 20 20
+
+* -  
+  - Usage
+  - Example
+* - `file`
+  - Test file type (format) 
+    Note: If the file format of the provided firmware image is unknown, then `file` will simply report that it contains binary data
+  - ```sh
+    $ file P2IM.Steering_Control.elf 
+    # P2IM.Steering_Control.elf: 
+    # ELF 32-bit LSB executable, 
+    # ARM, EABI5 version 1 (SYSV), statically linked, 
+    # with debug_info, not stripped
+    ```
+````
