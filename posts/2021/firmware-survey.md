@@ -86,10 +86,8 @@ $ sudo python3 setup.py install
 
 `binvis` generates a **visualization** of the firmware image with space-filling curves in order to identify regions with non-random data.
 
-Install by:
+[cortesi/scurve](https://github.com/cortesi/scurve) is not updated from many years ago, many dependencies are deprecated. 
 
-```
-$ git clone https://github.com/cortesi/scurve
-$ cd scurve
-$ sudo python3 setup.py
-```
+- Todo: I may modify it later to fix those issues when I have time.
+  
+But we can upload the firmware file to http://binvis.io/ to view the results.
