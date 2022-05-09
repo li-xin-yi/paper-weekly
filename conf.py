@@ -85,5 +85,15 @@ post_auto_excerpt = 2
 
 panels_add_bootstrap_css = False
 
+comments_config = {
+   "utterances": {
+        "repo":"li-xin-yi/paper-weekly",
+        "issue-term":"pathname",
+        "label":"comment",
+        "theme":"github-light",
+        "crossorigin":"anonymous"
+   }
+}
+
 def setup(app):
     app.add_css_file("custom.css")

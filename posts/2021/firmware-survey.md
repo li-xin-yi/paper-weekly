@@ -58,7 +58,7 @@ From [this slides](https://mews.sv.cmu.edu/teaching/14829/f18/files/firmware-ana
     ```
 ````
 
-#### `binwalk`
+### `binwalk`
 
 > Binwalk is a fast, easy to use tool for analyzing, reverse engineering, and extracting firmware images
 
@@ -82,7 +82,7 @@ $ sudo python3 setup.py install
     ```
 ````
 
-#### `binvis`
+### `binvis`
 
 `binvis` generates a **visualization** of the firmware image with space-filling curves in order to identify regions with non-random data.
 
